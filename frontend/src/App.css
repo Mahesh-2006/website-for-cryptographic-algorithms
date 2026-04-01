@@ -5,19 +5,22 @@
 }
 
 :root {
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --border-color: #334155;
-  --accent-blue: #3b82f6;
+  --bg-primary: #020b13;
+  --bg-secondary: #08131f;
+  --bg-tertiary: #112136;
+  --text-primary: #d7ffd8;
+  --text-secondary: #7ee5a6;
+  --text-muted: #5c7b6f;
+  --border-color: #052028;
+  --accent-blue: #2dd4bf;
   --accent-green: #22c55e;
   --accent-red: #ef4444;
   --accent-yellow: #eab308;
   --accent-orange: #f97316;
   --accent-purple: #a855f7;
+  --terminal: #042227;
+  --accent-neon: #00ff85;
+  --text-code: #a0f8c0;
 }
 
 body {
@@ -34,16 +37,19 @@ body {
 }
 
 .app-header {
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  background: radial-gradient(circle at top left, #112a3b 0%, var(--bg-secondary) 25%, #061e2f 100%);
   padding: 2rem;
   text-align: center;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--accent-neon);
+  box-shadow: 0 0 24px rgba(0, 255, 133, .25);
 }
 
 .app-header h1 {
+  font-family: 'Roboto Mono', 'Courier New', monospace;
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+  color: var(--accent-neon);
+  text-shadow: 0 0 14px rgba(0, 255, 133, .65), 0 0 28px rgba(0, 255, 133, .3);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -60,6 +66,9 @@ body {
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
+  background: linear-gradient(180deg, rgba(2,11,19,.9) 0%, rgba(2,11,19,.97) 100%);
+  border-left: 1px solid rgba(0,255,133,.3);
+  border-right: 1px solid rgba(0,255,133,.3);
 }
 
 .filters-bar {
@@ -117,18 +126,19 @@ body {
 }
 
 .category-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+  background: linear-gradient(130deg, var(--bg-secondary), #061f2e);
+  border: 1px solid rgba(0,255,133,0.3);
   border-radius: 16px;
   padding: 1.5rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .category-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--accent-blue);
-  box-shadow: 0 8px 30px rgba(59, 130, 246, 0.15);
+  transform: translateY(-3px);
+  border-color: var(--accent-neon);
+  background: linear-gradient(120deg, rgba(0,255,133,.08), rgba(2,11,19,.8));
+  box-shadow: 0 0 20px rgba(0,255,133,.22);
 }
 
 .category-icon {
@@ -195,14 +205,17 @@ body {
   grid-template-columns: 1fr 1fr 150px;
   gap: 1rem;
   padding: 0.75rem 1rem;
-  background: var(--bg-tertiary);
+  background: #07131f;
   border-radius: 8px;
+  border: 1px solid rgba(0,255,133,.15);
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .algo-row:hover {
-  background: var(--bg-primary);
+  background: rgba(0, 255, 133, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 0 16px rgba(0, 255, 133, 0.14);
 }
 
 .algo-name {
@@ -229,9 +242,9 @@ body {
 .app-footer {
   text-align: center;
   padding: 2rem;
-  background: var(--bg-secondary);
-  border-top: 1px solid var(--border-color);
-  color: var(--text-secondary);
+  background: #05101a;
+  border-top: 1px solid rgba(0,255,133,0.2);
+  color: var(--text-muted);
 }
 
 .footer-note {
