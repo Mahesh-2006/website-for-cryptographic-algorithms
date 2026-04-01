@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { ALGORITHM_DATA, CATEGORY_DATA } from './data/staticAlgorithms';
 import CategoryView from './components/CategoryView';
 import AlgorithmDetail from './components/AlgorithmDetail';
 import HardwareSelector from './components/HardwareSelector';
@@ -48,24 +49,29 @@ export default function App() {
   const [hardwareConfig, setHardwareConfig] = useState(null);
 
   useEffect(() => {
-    fetchData();
+    loadStaticData();
   }, []);
 
-  const fetchData = async () => {
+  const loadStaticData = () => {
     try {
       setLoading(true);
-      const [categoriesRes, algorithmsRes] = await Promise.all([
-        fetch('/api/algorithms/categories'),
-        fetch('/api/algorithms')
-      ]);
+      // Format categories for display with counts
+      const categoryMap = {};
+      CATEGORY_DATA.forEach(cat => {
+        categoryMap[cat.id] = { ...cat, count: 0 };
+      });
       
-      const categoriesData = await categoriesRes.json();
-      const algorithmsData = await algorithmsRes.json();
+      // Count algorithms per category
+      ALGORITHM_DATA.forEach(algo => {
+        if (categoryMap[algo.category]) {
+          categoryMap[algo.category].count++;
+        }
+      });
       
-      setCategories(categoriesData);
-      setAlgorithms(algorithmsData);
+      setCategories(Object.values(categoryMap));
+      setAlgorithms(ALGORITHM_DATA);
     } catch (err) {
-      setError('Failed to connect to server. Make sure the backend is running.');
+      setError('Failed to load algorithm data.');
     }
     setLoading(false);
   };
