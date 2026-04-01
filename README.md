@@ -6,6 +6,8 @@ A comprehensive web application for exploring, comparing, and understanding cryp
 
 The application is deployed on GitHub Pages: [https://mahesh-2006.github.io/website-for-cryptographic-algorithms](https://mahesh-2006.github.io/website-for-cryptographic-algorithms)
 
+*Last updated: April 2026*
+
 ## Features
 
 ### 🔍 Algorithm Explorer
