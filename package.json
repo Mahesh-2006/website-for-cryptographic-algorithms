@@ -1,6 +1,7 @@
 {
   "name": "project-crypto-simulator",
   "version": "1.0.0",
+  
   "description": "",
   "main": "server.js",
   "scripts": {
@@ -10,10 +11,20 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+
   "dependencies": {
+    "@noble/curves": "^2.0.1",
+    "@noble/post-quantum": "^0.5.4",
+    "blake3-jit": "^1.0.0",
+    "blakejs": "^1.2.1",
     "cors": "^2.8.6",
-    "express": "^5.2.1"
+    "crypto": "^1.0.1",
+    "express": "^5.2.1",
+    "node-tfhe": "^1.5.4",
+    "paillier-bigint": "^3.4.3",
+    "scrypt-js": "^3.0.1",
+    "snarkjs": "^0.7.6",
+    "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
