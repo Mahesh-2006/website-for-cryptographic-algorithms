@@ -4,6 +4,8 @@ import CategoryView from './components/CategoryView';
 import AlgorithmDetail from './components/AlgorithmDetail';
 import HardwareSelector from './components/HardwareSelector';
 import AttackTimeCalculator from './components/AttackTimeCalculator';
+import './index.css';
+import './App.css';
 
 const CATEGORY_DISPLAY_NAMES = {
   symmetric: 'Symmetric Encryption',
@@ -137,7 +139,7 @@ export default function App() {
       <div className="error-screen">
         <h1>Connection Error</h1>
         <p>{error}</p>
-        <button onClick={fetchData}>Retry</button>
+        <button onClick={loadStaticData}>Retry</button>
       </div>
     );
   }
