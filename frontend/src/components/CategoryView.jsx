@@ -21,6 +21,7 @@ export default function CategoryView({
   onBackToCategories
 }) {
   const description = CATEGORY_DESCRIPTIONS[category?.id];
+  const safeAlgorithms = Array.isArray(algorithms) ? algorithms : [];
 
   return (
     <div className="category-view">
@@ -31,12 +32,12 @@ export default function CategoryView({
         <div className="category-header-content">
           <h2>{category?.name || 'All Algorithms'}</h2>
           {description && <p className="category-description">{description}</p>}
-          <span className="algorithm-count">{algorithms.length} algorithms</span>
+          <span className="algorithm-count">{safeAlgorithms.length} algorithms</span>
         </div>
       </div>
       
       <div className="algorithm-grid">
-        {algorithms.map(algo => (
+        {safeAlgorithms.map(algo => (
           <AlgorithmCard
             key={algo.id}
             algorithm={algo}

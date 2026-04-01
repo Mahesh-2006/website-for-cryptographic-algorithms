@@ -78,10 +78,6 @@ export default function App() {
     setLoading(false);
   };
 
-  const getAlgorithmsForCategory = (categoryId) => {
-    return algorithms.filter(a => a.category === categoryId);
-  };
-
   const getCategoryStats = (categoryId) => {
     const algos = getAlgorithmsForCategory(categoryId);
     const stats = { total: algos.length };
@@ -91,9 +87,16 @@ export default function App() {
     return stats;
   };
 
+  const safeCategories = Array.isArray(categories) ? categories : [];
+  const safeAlgorithms = Array.isArray(algorithms) ? algorithms : [];
+
+  const getAlgorithmsForCategory = (categoryId) => {
+    return safeAlgorithms.filter(a => a.category === categoryId);
+  };
+
   const filteredAlgorithms = selectedCategory 
     ? getAlgorithmsForCategory(selectedCategory.id)
-    : algorithms;
+    : safeAlgorithms;
 
   const getDisplayAlgorithms = () => {
     let result = filteredAlgorithms;
@@ -275,7 +278,7 @@ export default function App() {
         </div>
 
         <div className="category-grid">
-          {categories.map(category => {
+          {safeCategories.map(category => {
             const stats = getCategoryStats(category.id);
             return (
               <div 

@@ -6,6 +6,9 @@ export default function AlgorithmDetail({ algorithm, onBack }) {
   
   const benchmark = getBenchmarkData(algorithm.id);
   const securityLabel = algorithm.securityLevel?.label || 'Unknown';
+  const useCases = Array.isArray(algorithm.educational?.useCases) ? algorithm.educational.useCases : [];
+  const pros = Array.isArray(algorithm.educational?.pros) ? algorithm.educational.pros : [];
+  const cons = Array.isArray(algorithm.educational?.cons) ? algorithm.educational.cons : [];
 
   return (
     <div className="algorithm-detail">
@@ -48,7 +51,7 @@ export default function AlgorithmDetail({ algorithm, onBack }) {
             <section>
               <h2>Use Cases</h2>
               <ul>
-                {algorithm.educational?.useCases?.map((useCase, i) => (
+                {useCases.map((useCase, i) => (
                   <li key={i}>{useCase}</li>
                 ))}
               </ul>
@@ -60,7 +63,7 @@ export default function AlgorithmDetail({ algorithm, onBack }) {
                 <div>
                   <h3>✓ Strengths</h3>
                   <ul>
-                    {algorithm.educational?.pros?.map((pro, i) => (
+                    {pros.map((pro, i) => (
                       <li key={i}>{pro}</li>
                     ))}
                   </ul>
@@ -68,7 +71,7 @@ export default function AlgorithmDetail({ algorithm, onBack }) {
                 <div>
                   <h3>✗ Weaknesses</h3>
                   <ul>
-                    {algorithm.educational?.cons?.map((con, i) => (
+                    {cons.map((con, i) => (
                       <li key={i}>{con}</li>
                     ))}
                   </ul>
