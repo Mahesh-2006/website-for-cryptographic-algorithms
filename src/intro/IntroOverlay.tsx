@@ -72,7 +72,7 @@ export function IntroOverlay({ onEnter }: IntroOverlayProps) {
           padding: '0 20px',
         }}
       >
-        Cryptography Atlas
+        Cryptography Engine
       </h1>
 
       <p
@@ -86,7 +86,7 @@ export function IntroOverlay({ onEnter }: IntroOverlayProps) {
           opacity: 0,
         }}
       >
-        Explore Ciphers &bull; Standards &bull; Attack Models
+        Cipher &bull; Analyze &bull; Simulate
       </p>
 
       <button
@@ -119,7 +119,7 @@ export function IntroOverlay({ onEnter }: IntroOverlayProps) {
           gsap.to(e.currentTarget, { scale: 1, boxShadow: '0 4px 28px rgba(255, 196, 0, 0.45), 0 0 60px rgba(138, 43, 226, 0.5)', duration: 0.3 })
         }}
       >
-        Launch Atlas
+        Enter
       </button>
     </div>
   )

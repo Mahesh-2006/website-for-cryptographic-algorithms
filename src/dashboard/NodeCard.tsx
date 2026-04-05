@@ -82,7 +82,7 @@ export function NodeCard({ title, subtitle, description, icon, accentColor, onCl
       <div>
         <h3 style={{
           fontFamily: 'var(--font-heading)',
-          fontSize: '1.3rem',
+          fontSize: '1.196rem',
           fontWeight: 500,
           letterSpacing: '0.04em',
           color: 'var(--text)',
@@ -90,7 +90,7 @@ export function NodeCard({ title, subtitle, description, icon, accentColor, onCl
         }}>{title}</h3>
         <p style={{
           fontFamily: 'var(--font-mono)',
-          fontSize: '0.72rem',
+          fontSize: '0.6624rem',
           letterSpacing: '0.1em',
           color: accentColor,
           textTransform: 'uppercase',
@@ -100,7 +100,7 @@ export function NodeCard({ title, subtitle, description, icon, accentColor, onCl
 
       <p style={{
         fontFamily: 'var(--font-heading)',
-        fontSize: '0.88rem',
+        fontSize: '0.8096rem',
         lineHeight: 1.5,
         color: 'var(--text-muted)',
         marginTop: 'auto',
@@ -108,7 +108,7 @@ export function NodeCard({ title, subtitle, description, icon, accentColor, onCl
 
       <div style={{
         fontFamily: 'var(--font-mono)',
-        fontSize: '0.7rem',
+        fontSize: '0.644rem',
         letterSpacing: '0.15em',
         color: 'var(--text-dim)',
         textTransform: 'uppercase',
