@@ -21,6 +21,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const distDir = path.join(__dirname, "dist");
 const distIndex = path.join(distDir, "index.html");
+const configuredSiteBase = process.env.SITE_BASE_PATH || "/website-for-cryptographic-algorithms";
+const siteBase = configuredSiteBase === "/"
+  ? ""
+  : `/${configuredSiteBase.replace(/^\/+|\/+$/g, "")}`;
 
 app.use(cors());
 app.use(express.json());
@@ -84,6 +88,7 @@ const statusPayload = {
   version: "2.1.0",
   status: "running",
   site: fs.existsSync(distIndex) ? "static build available" : "static build not found",
+  basePath: siteBase || "/",
   endpoints,
 };
 
@@ -92,9 +97,26 @@ app.get("/api/status", (_request, response) => {
 });
 
 if (fs.existsSync(distIndex)) {
+  if (siteBase) {
+    app.use(siteBase, express.static(distDir));
+
+    app.get(siteBase, (_request, response) => {
+      response.sendFile(distIndex);
+    });
+
+    app.get(`${siteBase}/{*splat}`, (_request, response) => {
+      response.sendFile(distIndex);
+    });
+  }
+
   app.use(express.static(distDir));
 
-  app.get("/{*splat}", (_request, response) => {
+  app.get("/{*splat}", (request, response, next) => {
+    if (request.path.startsWith("/api/")) {
+      next();
+      return;
+    }
+
     response.sendFile(distIndex);
   });
 } else {

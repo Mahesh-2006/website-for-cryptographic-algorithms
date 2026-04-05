@@ -101,6 +101,9 @@ interface MorphicMeshProps {
   amplitudeOverride?: number
 }
 
+const SURFACE_DETAIL = 5
+const WIREFRAME_DETAIL = 2
+
 export function MorphicMesh({ amplitudeOverride }: MorphicMeshProps) {
   const meshRef = useRef<THREE.Mesh>(null)
   const wireRef = useRef<THREE.Mesh>(null)
@@ -141,7 +144,7 @@ export function MorphicMesh({ amplitudeOverride }: MorphicMeshProps) {
   return (
     <group>
       <mesh ref={meshRef}>
-        <icosahedronGeometry args={[1.5, 48]} />
+        <icosahedronGeometry args={[1.5, SURFACE_DETAIL]} />
         <shaderMaterial
           ref={materialRef}
           vertexShader={vertexShader}
@@ -152,7 +155,7 @@ export function MorphicMesh({ amplitudeOverride }: MorphicMeshProps) {
         />
       </mesh>
       <mesh ref={wireRef} scale={1.01}>
-        <icosahedronGeometry args={[1.5, 16]} />
+        <icosahedronGeometry args={[1.5, WIREFRAME_DETAIL]} />
         <meshBasicMaterial
           color="#00f0ff"
           wireframe
