@@ -1,70 +1,141 @@
-# Cryptography Atlas
+# Cryptographic Algorithms Simulator
 
-An interactive cryptography reference focused on exploration rather than raw benchmarking. The current site combines a cinematic intro, a searchable atlas of 72 algorithms across 14 categories, a Caesar cipher workbench, and an educational attack-estimation lab.
+A comprehensive web application for exploring, comparing, and understanding cryptographic algorithms. This project demonstrates various encryption techniques, their security properties, performance characteristics, and real-world applications.
 
-## Live Site
+## 🌐 Live Demo
 
-GitHub Pages URL: [https://mahesh-2006.github.io/website-for-cryptographic-algorithms/](https://mahesh-2006.github.io/website-for-cryptographic-algorithms/)
+The application is deployed on GitHub Pages: [https://mahesh-2006.github.io/website-for-cryptographic-algorithms](https://mahesh-2006.github.io/website-for-cryptographic-algorithms)
 
-## What’s Included
+*Last updated: April 2026*
 
-- Intro experience built with React Three Fiber and shader-driven visuals.
-- Algorithm atlas covering symmetric ciphers, hashes, signatures, post-quantum schemes, homomorphic encryption, and zero-knowledge systems.
-- Caesar cipher workbench for shift, numeric, and custom-symbol mapping experiments.
-- Attack estimation lab comparing brute force, dictionary, Grover, and Shor-style models across multiple hardware profiles.
+## Features
 
-## Stack
+### 🔍 Algorithm Explorer
+- Browse algorithms by category (Symmetric, Hash, MAC, Asymmetric, etc.)
+- Detailed security parameters and complexity analysis
+- Educational content explaining how each algorithm works
+- Security level indicators and quantum resistance status
 
-- React 18 + TypeScript + Vite
-- React Three Fiber, Drei, and postprocessing for the intro scene
-- GSAP for motion
-- Express for optional local serving and legacy API compatibility
-- GitHub Actions for automated Pages deployment
+### 📊 Performance Benchmarking
+- Mock performance benchmarks for algorithm comparison
+- Operations per second, throughput, and timing metrics
+- Breakdown by operation type (encryption, decryption, signing, etc.)
+
+### ⚡ Attack Time Calculator
+- Estimate cracking times using different hardware configurations
+- Compare algorithms against various computing platforms
+- Universe age comparisons for astronomical time scales
+
+### 📱 Mobile Responsive
+- Touch-friendly interfaces optimized for mobile devices
+- Responsive design that works on all screen sizes
+- Progressive enhancement for better performance
+
+## Architecture
+
+### Frontend (GitHub Pages)
+- **React 19** with modern hooks and functional components
+- **Vite** for fast development and optimized builds
+- **Static Data** - pre-built algorithm database for GitHub Pages compatibility
+- **Responsive CSS** with mobile-first design principles
+
+### Backend (Local Development)
+- **Node.js/Express** API server
+- **Cryptographic Libraries** - Noble curves, crypto-js, etc.
+- **Performance Benchmarking** with real cryptographic operations
+- **Hardware Simulation** for attack time calculations
+
+## Algorithm Categories
+
+- 🔐 **Symmetric Encryption**: AES-128/256, ChaCha20
+- #️⃣ **Hash Functions**: SHA-256, SHA-3, BLAKE2b, MD5
+- 🔏 **Message Authentication Codes**: HMAC-SHA256
+- 🛡️ **Authenticated Encryption**: AEAD schemes
+- 🔑 **Asymmetric Encryption**: RSA-2048, ECC-256
+- 📝 **Digital Signatures**: ECDSA, EdDSA
+- 🤝 **Key Exchange**: ECDH, X25519
+- 🔒 **Password Hashing**: Argon2id, scrypt
+- ⚛️ **Post-Quantum Cryptography**: Kyber-512
+- 🎭 **Zero-Knowledge Proofs**: ZKP systems
+- 🧮 **Homomorphic Encryption**: FHE schemes
 
 ## Development
 
-Requirements:
-- Node.js 20+
-- npm
+### Prerequisites
+- Node.js 18+
+- npm or yarn
 
-Commands:
-- `npm install`
-- `npm run dev` to start the Vite app locally
-- `npm run dev:api` to run the Express server with nodemon
-- `npm run build` to create a production bundle in `dist/`
-- `npm run preview` to preview the built site locally
-- `npm start` to serve the built site and any available API routes
+### Local Development (Full Stack)
+```bash
+# Install backend dependencies
+npm install
 
-For a Pages-equivalent local build, run:
+# Install frontend dependencies
+cd frontend && npm install && cd ..
+
+# Start backend server
+npm start
+
+# In another terminal, start frontend dev server
+cd frontend && npm run dev
+```
+
+### GitHub Pages Deployment
+The frontend is automatically deployed to GitHub Pages when changes are pushed to the `master` branch.
 
 ```bash
-VITE_PUBLIC_BASE=/website-for-cryptographic-algorithms/ npm run build
+# Build and deploy manually
+cd frontend
+npm run build
+# Files in dist/ are deployed to GitHub Pages
 ```
 
-## Deployment
+## Project Structure
 
-The site deploys automatically from `main` through [.github/workflows/deploy-pages.yml](.github/workflows/deploy-pages.yml). The workflow installs dependencies, builds the root Vite app with the repository base path, and publishes `dist/` to GitHub Pages.
-
-## Repository Layout
-
-```text
-.
-├── public/                   # Static assets used by the current site
-├── src/                      # Current React + TypeScript application
-├── services/                 # Legacy API route modules kept for local compatibility
-├── frontend/                 # Legacy frontend snapshot retained from earlier iterations
-├── .github/workflows/        # Deployment automation
-├── index.html                # Vite entry HTML
-├── server.js                 # Local Express server
-└── vite.config.ts            # Vite configuration
+```
+├── frontend/                 # React frontend (GitHub Pages)
+│   ├── src/
+│   │   ├── components/       # React components
+│   │   ├── data/            # Static algorithm data
+│   │   └── ...
+│   ├── dist/                # Built static files
+│   └── package.json
+├── services/                # Backend services
+│   ├── algorithms/          # Algorithm definitions
+│   ├── routes/              # API endpoints
+│   └── utils/               # Utilities
+├── .github/workflows/       # GitHub Actions
+└── server.js               # Express server
 ```
 
-## Notes
+## Technologies
 
-- The attack estimates are intentionally educational and order-of-magnitude only.
-- The current GitHub Pages deployment uses the root `src/` application, not the legacy `frontend/` directory.
-- Use established, peer-reviewed libraries for any real cryptographic system.
+### Frontend
+- React 19
+- Vite
+- CSS3 with CSS Variables
+- GitHub Pages
+
+### Backend
+- Node.js
+- Express.js
+- Noble Curves (ECC)
+- Crypto-js
+- Blake3
+- SnarkJS
+
+## Security Notice
+
+This application is for educational purposes. The benchmark results are simulated for demonstration. In production cryptographic applications, always use established, peer-reviewed implementations and follow security best practices.
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
 ## License
 
-Released under the [MIT License](LICENSE).
+This project is open source and available under the [MIT License](LICENSE).
