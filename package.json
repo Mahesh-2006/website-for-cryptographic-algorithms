@@ -8,6 +8,7 @@
     "dev:api": "nodemon server.js",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "prestart": "npm run build",
     "start": "node server.js",
     "serve": "node server.js"
   },
