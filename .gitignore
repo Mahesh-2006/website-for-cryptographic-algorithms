@@ -156,6 +156,7 @@ Thumbs.db
 /dist
 /build
 /.vite
+/assets
 
 # Environment files
 .env
