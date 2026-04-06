@@ -84,9 +84,9 @@ export function Dashboard({ onSelect }: DashboardProps) {
         ref={cardsRef}
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(257.6px, 1fr))',
           gap: '28px',
-          maxWidth: '1100px',
+          maxWidth: '1012px',
           width: '100%',
         }}
       >

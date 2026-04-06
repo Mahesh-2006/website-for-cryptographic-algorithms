@@ -62,7 +62,7 @@ export function NodeCard({ title, subtitle, description, icon, accentColor, onCl
         display: 'flex',
         flexDirection: 'column',
         gap: '16px',
-        minHeight: '260px',
+        minHeight: '239.2px',
         position: 'relative',
         overflow: 'hidden',
       }}
