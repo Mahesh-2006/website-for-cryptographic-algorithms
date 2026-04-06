@@ -133,13 +133,14 @@ function CornerBrackets() {
 /* ── Scan line animation (CSS injected once) ── */
 const STYLE_ID = '__intro-overlay-styles'
 const TITLES = [
-  'Cryptographic Atlas',
-  'クリプトグラフィックアトラス',
-  'Atlas Cryptographique',
-  'Криптографический Атлас',
-  'أطلس التشفير',
-  '密码图谱',
-  'Kriptografik Atlas',
+  'Cryptographic Atlas',        // English
+  'Atlas Criptográfico',        // Spanish
+  'Atlas Cryptographique',      // French
+  'क्रिप्टोग्राफ़िक एटलस',    // Hindi
+  '密码图谱',                    // Chinese
+  'Криптографический Атлас',    // Russian
+  'خفیہ نگاری اٹلس',            // Urdu
+  'クリプトグラフィックアトラス', // Japanese
 ]
 
 const CSS = `
