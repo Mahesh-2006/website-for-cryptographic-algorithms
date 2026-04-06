@@ -62,15 +62,19 @@ uniform float uFrequency;
 varying vec3 vNormal;
 varying vec3 vPosition;
 varying float vDisplacement;
+varying vec3 vWorldPos;
 
 void main() {
   vec3 pos = position;
   vec3 noiseInput = pos * uFrequency + vec3(uMouse * 0.5, uTime * 0.3);
   float displacement = snoise(noiseInput) * uAmplitude;
   displacement += snoise(pos * uFrequency * 3.0 + uTime * 0.5) * uAmplitude * 0.25;
+  // Third octave for micro-detail
+  displacement += snoise(pos * uFrequency * 6.0 + uTime * 0.8) * uAmplitude * 0.08;
   pos += normal * displacement;
   vNormal = normalize(normalMatrix * normal);
   vPosition = (modelViewMatrix * vec4(pos, 1.0)).xyz;
+  vWorldPos = pos;
   vDisplacement = displacement;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
 }
@@ -79,21 +83,70 @@ void main() {
 const fragmentShader = /* glsl */ `
 uniform vec3 uColorA;
 uniform vec3 uColorB;
+uniform vec3 uColorC;
 uniform float uTime;
 
 varying vec3 vNormal;
 varying vec3 vPosition;
 varying float vDisplacement;
+varying vec3 vWorldPos;
 
 void main() {
   vec3 viewDir = normalize(-vPosition);
   float fresnel = pow(1.0 - max(dot(viewDir, vNormal), 0.0), 3.0);
-  vec3 color = mix(uColorA, uColorB, fresnel + vDisplacement * 0.5);
-  color += fresnel * vec3(0.0, 0.94, 1.0) * 0.5;
-  float iridescence = sin(vDisplacement * 10.0 + uTime * 0.5) * 0.1;
-  color += vec3(iridescence, iridescence * 0.5, -iridescence) * fresnel;
-  float alpha = 0.82 + fresnel * 0.18;
+
+  // Three-color gradient based on fresnel + displacement
+  float t = clamp(fresnel + vDisplacement * 0.5, 0.0, 1.0);
+  vec3 color;
+  if (t < 0.5) {
+    color = mix(uColorA, uColorB, t * 2.0);
+  } else {
+    color = mix(uColorB, uColorC, (t - 0.5) * 2.0);
+  }
+
+  // Rim glow – brighter, multi-hued
+  color += fresnel * vec3(0.0, 0.94, 1.0) * 0.6;
+  color += fresnel * fresnel * vec3(0.54, 0.17, 0.89) * 0.3;
+
+  // Enhanced iridescence with two wave frequencies
+  float iri1 = sin(vDisplacement * 12.0 + uTime * 0.5) * 0.12;
+  float iri2 = sin(vWorldPos.y * 8.0 + uTime * 0.3) * 0.06;
+  color += vec3(iri1, iri1 * 0.5 + iri2, -iri1 + iri2) * fresnel;
+
+  // Subtle energy pulse
+  float pulse = sin(uTime * 1.5) * 0.04 + 0.04;
+  color += pulse * vec3(0.0, 0.94, 1.0);
+
+  float alpha = 0.85 + fresnel * 0.15;
   gl_FragColor = vec4(color, alpha);
+}
+`
+
+/* Inner glow core fragment */
+const coreFragment = /* glsl */ `
+uniform float uTime;
+uniform vec3 uCoreColor;
+
+varying vec3 vNormal;
+varying vec3 vPos;
+
+void main() {
+  vec3 viewDir = normalize(-vPos);
+  float fresnel = pow(1.0 - max(dot(viewDir, vNormal), 0.0), 2.0);
+  float pulse = 0.6 + 0.4 * sin(uTime * 2.0);
+  float alpha = fresnel * pulse * 0.35;
+  gl_FragColor = vec4(uCoreColor, alpha);
+}
+`
+
+const coreVertex = /* glsl */ `
+varying vec3 vNormal;
+varying vec3 vPos;
+
+void main() {
+  vNormal = normalize(normalMatrix * normal);
+  vPos = (modelViewMatrix * vec4(position, 1.0)).xyz;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }
 `
 
@@ -101,13 +154,15 @@ interface MorphicMeshProps {
   amplitudeOverride?: number
 }
 
-const SURFACE_DETAIL = 5
+const SURFACE_DETAIL = 4
 const WIREFRAME_DETAIL = 2
 
 export function MorphicMesh({ amplitudeOverride }: MorphicMeshProps) {
   const meshRef = useRef<THREE.Mesh>(null)
   const wireRef = useRef<THREE.Mesh>(null)
+  const coreRef = useRef<THREE.Mesh>(null)
   const materialRef = useRef<THREE.ShaderMaterial>(null)
+  const coreMaterialRef = useRef<THREE.ShaderMaterial>(null)
   const mouse = useMouse()
 
   const uniforms = useMemo(() => ({
@@ -117,10 +172,19 @@ export function MorphicMesh({ amplitudeOverride }: MorphicMeshProps) {
     uFrequency: { value: 1.5 },
     uColorA: { value: new THREE.Color('#00f0ff') },
     uColorB: { value: new THREE.Color('#8a2be2') },
+    uColorC: { value: new THREE.Color('#00ff9f') },
+  }), [])
+
+  const coreUniforms = useMemo(() => ({
+    uTime: { value: 0 },
+    uCoreColor: { value: new THREE.Color('#00f0ff') },
   }), [])
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime()
+
+    // Subtle breathing scale
+    const breath = 1.0 + Math.sin(t * 0.8) * 0.015
 
     if (materialRef.current) {
       materialRef.current.uniforms.uTime.value = t
@@ -130,19 +194,32 @@ export function MorphicMesh({ amplitudeOverride }: MorphicMeshProps) {
       }
     }
 
+    if (coreMaterialRef.current) {
+      coreMaterialRef.current.uniforms.uTime.value = t
+    }
+
     if (meshRef.current) {
       meshRef.current.rotation.y = t * 0.08
       meshRef.current.rotation.x = Math.sin(t * 0.05) * 0.15
+      meshRef.current.scale.setScalar(breath)
     }
 
     if (wireRef.current) {
       wireRef.current.rotation.y = t * 0.08
       wireRef.current.rotation.x = Math.sin(t * 0.05) * 0.15
+      wireRef.current.scale.setScalar(breath * 1.01)
+    }
+
+    if (coreRef.current) {
+      coreRef.current.rotation.y = t * 0.08
+      coreRef.current.rotation.x = Math.sin(t * 0.05) * 0.15
+      coreRef.current.scale.setScalar(breath * 0.7)
     }
   })
 
   return (
     <group>
+      {/* Main surface */}
       <mesh ref={meshRef}>
         <icosahedronGeometry args={[1.5, SURFACE_DETAIL]} />
         <shaderMaterial
@@ -154,6 +231,8 @@ export function MorphicMesh({ amplitudeOverride }: MorphicMeshProps) {
           depthWrite={false}
         />
       </mesh>
+
+      {/* Wireframe overlay */}
       <mesh ref={wireRef} scale={1.01}>
         <icosahedronGeometry args={[1.5, WIREFRAME_DETAIL]} />
         <meshBasicMaterial
@@ -161,6 +240,21 @@ export function MorphicMesh({ amplitudeOverride }: MorphicMeshProps) {
           wireframe
           transparent
           opacity={0.06}
+        />
+      </mesh>
+
+      {/* Inner glow core */}
+      <mesh ref={coreRef} scale={0.7}>
+        <icosahedronGeometry args={[1.5, 3]} />
+        <shaderMaterial
+          ref={coreMaterialRef}
+          vertexShader={coreVertex}
+          fragmentShader={coreFragment}
+          uniforms={coreUniforms}
+          transparent
+          depthWrite={false}
+          side={THREE.BackSide}
+          blending={THREE.AdditiveBlending}
         />
       </mesh>
     </group>

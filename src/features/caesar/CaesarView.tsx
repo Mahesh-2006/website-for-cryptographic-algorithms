@@ -80,7 +80,6 @@ function customDecode(
   caseSensitive: boolean,
   separator: string,
 ): string {
-  const tokens = separator ? text.split(separator) : text.split('')
   const reverseMap: MappingRecord = {}
   Object.entries(lowerMap).forEach(([k, v]) => { reverseMap[v] = k })
   if (caseSensitive) {
@@ -88,7 +87,29 @@ function customDecode(
   }
   Object.entries(digitMap).forEach(([k, v]) => { reverseMap[v] = k })
   Object.entries(symbolMap).forEach(([k, v]) => { reverseMap[v] = k })
-  return tokens.map(t => reverseMap[t] ?? t).join('')
+
+  if (separator) {
+    return text.split(separator).map(t => reverseMap[t] ?? t).join('')
+  }
+
+  const knownTokens = Object.keys(reverseMap).sort((left, right) => right.length - left.length)
+  const decoded: string[] = []
+
+  let cursor = 0
+  while (cursor < text.length) {
+    const matchedToken = knownTokens.find((token) => text.startsWith(token, cursor))
+
+    if (matchedToken) {
+      decoded.push(reverseMap[matchedToken])
+      cursor += matchedToken.length
+      continue
+    }
+
+    decoded.push(text[cursor])
+    cursor += 1
+  }
+
+  return decoded.join('')
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────

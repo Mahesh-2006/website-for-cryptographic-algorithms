@@ -3,12 +3,19 @@ import gsap from 'gsap'
 import { BackButton } from '../../components/BackButton'
 import { algorithms, CATEGORIES, type Algorithm } from './algorithmData'
 
+/* pre-compute category counts once */
+const CATEGORY_COUNTS: Record<string, number> = {}
+for (const a of algorithms) {
+  CATEGORY_COUNTS[a.category] = (CATEGORY_COUNTS[a.category] || 0) + 1
+}
+
 export function AtlasView({ onBack }: { onBack: () => void }) {
   const [activeCategory, setActiveCategory] = useState<string>('all')
   const [search, setSearch] = useState('')
   const [selected, setSelected] = useState<Algorithm | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
+  const isFirstRender = useRef(true)
   const algorithmCount = algorithms.length
   const categoryCount = CATEGORIES.length
 
@@ -30,11 +37,14 @@ export function AtlasView({ onBack }: { onBack: () => void }) {
     gsap.fromTo(containerRef.current, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power2.out' })
   }, [])
 
+  /* Only animate on first mount – skip heavy stagger on every filter change */
   useEffect(() => {
-    if (gridRef.current) {
+    if (!gridRef.current) return
+    if (isFirstRender.current) {
+      isFirstRender.current = false
       gsap.fromTo(gridRef.current.children,
         { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.4, stagger: 0.02, ease: 'power2.out' }
+        { opacity: 1, y: 0, duration: 0.35, stagger: 0.015, ease: 'power2.out' }
       )
     }
   }, [filtered])
@@ -57,7 +67,7 @@ export function AtlasView({ onBack }: { onBack: () => void }) {
   }
 
   return (
-    <div ref={containerRef} style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', padding: '80px 24px 24px', overflow: 'hidden', opacity: 0 }}>
+    <div ref={containerRef} style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', padding: 'max(60px, env(safe-area-inset-top, 0px) + 50px) 16px 16px', overflow: 'hidden', opacity: 0 }}>
       <BackButton onBack={onBack} />
 
       <div style={{ textAlign: 'center', marginBottom: '24px' }}>
@@ -94,7 +104,7 @@ export function AtlasView({ onBack }: { onBack: () => void }) {
             marginBottom: '12px',
           }}
         />
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+        <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '6px', overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '4px', scrollbarWidth: 'none' }}>
           <button
             onClick={() => setActiveCategory('all')}
             style={{
@@ -105,6 +115,8 @@ export function AtlasView({ onBack }: { onBack: () => void }) {
               border: 'none',
               borderRadius: '999px',
               cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
               background: activeCategory === 'all' ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.03)',
               color: activeCategory === 'all' ? 'var(--text)' : 'var(--text-muted)',
               transition: 'all 0.2s ease',
@@ -113,7 +125,7 @@ export function AtlasView({ onBack }: { onBack: () => void }) {
             ALL ({algorithmCount})
           </button>
           {CATEGORIES.map((cat) => {
-            const count = algorithms.filter(a => a.category === cat).length
+            const count = CATEGORY_COUNTS[cat] || 0
             return (
               <button
                 key={cat}
@@ -126,6 +138,8 @@ export function AtlasView({ onBack }: { onBack: () => void }) {
                   border: 'none',
                   borderRadius: '999px',
                   cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
                   background: activeCategory === cat ? `${categoryColors[cat] || '#fff'}18` : 'rgba(255,255,255,0.03)',
                   color: activeCategory === cat ? (categoryColors[cat] || 'var(--text)') : 'var(--text-muted)',
                   transition: 'all 0.2s ease',
@@ -139,7 +153,7 @@ export function AtlasView({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Grid */}
-      <div style={{ flex: 1, overflow: 'auto', padding: '4px' }}>
+      <div style={{ flex: 1, overflow: 'auto', WebkitOverflowScrolling: 'touch', padding: '4px', minHeight: 0 }}>
         <div ref={gridRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '12px', maxWidth: '900px', margin: '0 auto' }}>
           {filtered.map((algo) => (
             <div

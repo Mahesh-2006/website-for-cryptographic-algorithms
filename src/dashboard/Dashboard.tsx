@@ -57,7 +57,7 @@ export function Dashboard({ onSelect }: DashboardProps) {
           color: 'var(--text)',
           marginBottom: '12px',
         }}>
-          Cryptography Atlas
+          Cryptographic Atlas
         </h1>
         <p style={{
           fontFamily: 'var(--font-mono)',

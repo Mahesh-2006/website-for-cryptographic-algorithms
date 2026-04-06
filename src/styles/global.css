@@ -75,6 +75,14 @@ body {
   animation: noiseShift 0.15s steps(4) infinite;
 }
 
+@media (pointer: coarse), (max-width: 768px) {
+  .noise-overlay {
+    opacity: 0.018;
+    background-size: 320px 320px;
+    animation-duration: 0.45s;
+  }
+}
+
 @keyframes noiseShift {
   0%   { background-position: 0 0; }
   25%  { background-position: -128px -64px; }
