@@ -329,9 +329,9 @@ export function IntroOverlay({ onEnter }: IntroOverlayProps) {
         <h1
           style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2rem, 6vw, 5rem)',
+            fontSize: 'clamp(1.2rem, 3.5vw, 2.8rem)',
             fontWeight: 700,
-            letterSpacing: '0.22em',
+            letterSpacing: '0.18em',
             textTransform: 'uppercase',
             color: 'var(--text)',
             textAlign: 'center',
